@@ -1,0 +1,29 @@
+{% extends 'Home/AnaSayfa.html' %}
+
+{% block title %}
+<title>{{ request.user.username}} ~ Begeniler </title>
+{% endblock title %}
+
+{% block body %}
+<h5>Beğenilenler</h5>
+<table class="table">
+    <tr>
+        <th>Başlık</th>
+        <th>Yazar</th>
+        <th>Kategori</th>
+        <th>Zaman</th>
+        <th>Beğeniyi Geri Çek</th>
+    </tr>
+    {% for soru in sorular %}
+        <tr>
+            <td><a style="color:black" href="{% url 'detailSoru' soru.soru.slug %}">{{soru.soru.title}}</a></td>
+            <td><a style="color:black" href="{% url 'kullaniciDetail' soru.soru.reporter.id %}">{{soru.soru.reporter}}</a></td>
+            <td>{{soru.soru.catego}}</td>
+            <td>{{soru.date}}</td>
+            <td><a href="{% url 'begensilSoru' soru.soru.slug %}" ><i style="color:red; font-size:1.7em" class="fas fa-heart-broken"></i></a></td>
+        </tr>
+    {% endfor %}
+</table>
+<br>
+{% endblock body %}
+

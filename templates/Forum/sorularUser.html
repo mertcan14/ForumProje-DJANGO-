@@ -1,0 +1,57 @@
+{% extends 'Home/AnaSayfa.html' %}
+
+{% block title %}
+<title>{{request.user.username}} ~ Sorularım</title>
+{% endblock title %}
+
+{% block body %}
+<h5>Sorularım</h5>
+<br>
+<table class="table" >
+    <tr>
+        <th class="text-center">Başlık</th>
+        <th class="text-center">İçerik</th>
+        <th class="text-center">Kategori</th>
+        <th class="text-center">Zaman</th>
+        <th class="text-center">Güncelle</th>
+        <th class="text-center">Sil</th>
+    </tr>
+    {% for soru in sorular %}
+        <tr style="{% cycle 'background-color:#fff2e6' 'background-color:white' %}" >
+            <td><a style="color:black" href="{% url 'detailSoru' soru.slug %}">{{soru.title|truncatechars:15}}</a></td>
+            <td style="width:40%">{{soru.content|safe|truncatechars:100}}</td>
+            <td>{{soru.catego}}</td>
+            <td>{{soru.date}}</td>
+            <td class="text-center"><a href="{% url 'soruUpdate' soru.slug %}" ><i style="color:blue; font-size:2em" class="fas fa-pen-square"></i></a></td>
+            <td class="text-center"><a type="button" data-toggle="modal" data-target="#myModal" ><i style="color:red; font-size:1.7em" class="fas fa-trash-alt"></i></a></td>
+        </tr>
+        <div class="modal" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                    <h4 class="modal-title">Yorum Silmek</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                    Silmek İstediğinize Emin Misiniz?
+                    </div>
+                    
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                    <a href="{% url 'soruSil' soru.slug %}"  class="btn btn-danger">Evet</a>
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Hayır</button>
+                    </div>
+
+                    
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</table>
+<br>
+{% endblock body %}
+

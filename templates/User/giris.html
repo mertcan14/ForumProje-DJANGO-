@@ -1,0 +1,17 @@
+{% extends 'Home/AnaSayfa.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Giriş</title>
+{% endblock title %}
+
+
+{% block body %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form|crispy}}
+        <div class="row justify-content-center">
+            <button type="submit" class="btn-lg" style="background-color:#668cff">Gönder</button>
+        </div>
+    </form>
+{% endblock body %}

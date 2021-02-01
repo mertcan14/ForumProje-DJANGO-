@@ -1,0 +1,25 @@
+{% extends 'Home/AnaSayfa.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+<title>Kayıt Ol</title>
+{% endblock title %}
+
+
+{% block body %}
+    <form method="POST">
+        {% csrf_token %}
+        {{form.username|as_crispy_field}}
+        <div class="row">
+            <div class="form-group col-md-6 mb-0">
+                {{form.password|as_crispy_field}}
+            </div>
+            <div class="form-group col-md-6 nb-0">
+                {{form.tekrar|as_crispy_field}}
+            </div>
+        </div>
+        {{form.email|as_crispy_field}}
+        <div class="row justify-content-center">
+            <button type="submit" class="btn-lg" style="background-color:#668cff">Kayıt OL</button>
+        </div>
+    </form>
+{% endblock body %}

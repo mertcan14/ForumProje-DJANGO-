@@ -1,0 +1,49 @@
+{% extends 'Home/AnaSayfa.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}
+<title>Profil Güncelle..</title>
+{% endblock title %}
+
+{% block body %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-6">
+            {{ formUser.first_name|as_crispy_field }}
+        </div>
+        <div class="col-6">
+            {{ formUser.last_name|as_crispy_field }}
+        </div>
+        <div class="col-6">
+            <div class="form-group row">
+                <label for="example-date-input" class="col-3 col-form-label">Doğum Günü</label>
+                <div class="col-12">
+                    <input name="dogumGunu" id="dogumGunu" class="form-control" value="{{ dogumGunuu|date:"Y-m-d" }}"  type="date" id="example-date-input">
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            {{ formProfil.location|as_crispy_field }}
+        </div>
+        <div class="col-12">
+            {{ formProfil.hakkimda|as_crispy_field}}
+        </div>
+        <div class="col-12 d-flex justify-content-end" >
+            {{ formProfil.user_image|as_crispy_field }}
+        </div>
+    </div>
+    <button class="btn btn-primary btn-block">Gönder</button>
+</form>
+<br>
+<div class="row"> 
+    <div class="col-12">
+        <a class="btn btn-light btn-block" href="{% url 'kullaniciResetpassword' %}">Sifre Reset</a>
+    </div>
+</div>
+<br>
+{% endblock body %}
+
+
+
+

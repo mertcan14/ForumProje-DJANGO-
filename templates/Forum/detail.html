@@ -1,0 +1,106 @@
+{% extends 'Home/AnaSayfa.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+    <title>{{paylasim.slug}}</title>
+{% endblock title %}
+
+
+
+
+
+{% block body %}
+    <div class="row justify-content-between">
+        <div>
+            {% if prev_issue %}
+                <a href="{% url 'detailSoru' prev_issue.slug %}"><i class="fas fa-angle-double-left"></i> {{prev_issue.title}}</a>
+            {% endif %}    
+        </div>
+        <div>
+            {% if next_issue %}
+                <a href="{% url 'detailSoru' next_issue.slug %}">{{next_issue.title}} <i class="fas fa-angle-double-right"></i></a>
+            {% endif %}
+        </div>  
+    </div>
+    <div class="row">
+        <div class="col-3 text-center">
+            <div style="background-color:#faf7d3; padding-top:5%; padding-bottom:5%; border-radius:5%; margin-top:11%" >
+                {% if paylasim.reporter.profil.user_image %}
+                    <a href="{% url 'kullaniciDetail' paylasim.reporter.id %}"><img class="img-fluid" style="width:150px; height:150px; border-radius: 5%" src="{{paylasim.reporter.profil.user_image.url}}"></a>
+                {% else %}
+                    <a style="color:black" href="{% url 'kullaniciDetail' paylasim.reporter.id %}"><i class="fas fa-user" style="font-size: 11rem"></i></a>
+                {% endif %}
+                <hr>
+                <p ><a href="{% url 'kullaniciDetail' paylasim.reporter.id %}"><i>{{paylasim.reporter.username}}</i></a></p>
+            </div>
+        </div>
+        <div class="col-9">
+            <br />
+            <div style="background-color:#faf7d3; border-radius:5%" class="container">
+                <div>
+                    <h2 class="text-center">{{paylasim.title}}</h2>
+                    <div class="row justify-content-between">
+                        <div class="col-6">
+                            {% if begenen == 0 %}
+                                <a href="{% url 'begenSoru' paylasim.slug %}" class="btn"><i class="far fa-heart"></i></a>
+                            {% else %}
+                                <a href="{% url 'begensilSoru' paylasim.slug %}" class="btn"><i style="color:red;" class="fas fa-heart"></i></a>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+                <hr />
+                <div>
+                    <p>{{paylasim.content|safe}}</p>
+                    <p class="text-right"><i>{{paylasim.date}}</i></p>
+                </div>
+            </div>
+            {% if request.user.is_authenticated %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-10 form-group">
+                            {{form.commit|as_crispy_field}}
+                        </div>
+                        <div class="col-2" style="margin-top:3%">
+                            <button type="submit" class="btn" style="background-color:#668cff">Gönder</button>
+                        </div>
+                    </div>
+                </form>
+            {% else %}
+                <div class="alert alert-info">
+                    <strong>Giriş</strong> yapmaznız gerekiyor..
+                </div>
+            {% endif %}
+
+            {% if yorumlar %}
+                <div class="container">
+                    {% for yorum in yorumlar %}
+                        <div style="background-color:#f5efef; border-radius:5%;">
+                            <div class="row">
+                                <div class="col-1" style="margin:auto">
+                                    {% if yorum.reporter.profil.user_image %}
+                                        <a href="{% url 'kullaniciDetail' yorum.reporter.id %}"><img class="img-fluid" style="width:auto; min-width:30px; max-width:50px; border-radius:50%" src="{{yorum.reporter.profil.user_image.url}}"></a>
+                                    {% else %}
+                                        <a href="{% url 'kullaniciDetail' yorum.reporter.id %}"><i class="fas fa-user" style="font-size: 4rem; border-radius:50%; color:black"></i></a>
+                                    {% endif %}
+                                </div>
+                                <div class="col-11">
+                                    <p style="padding:1%">
+                                        {{yorum.commit}}<br />
+                                    <p style="font-size:11px;" align="right"><i><a href="{% url 'kullaniciDetail' yorum.reporter.id %}">{{yorum.reporter}}</a> ~ {{yorum.date}}</i></p>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="container" style="background-color:#ffad99; border-radius:3%">
+                    <p style="padding:1%;"><strong>Daha önceden yorum yapılmamış. İlk yorum yapan siz olun.</strong></p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock body %}

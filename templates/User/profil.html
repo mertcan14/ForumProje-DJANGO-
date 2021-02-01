@@ -1,0 +1,67 @@
+{% extends 'Home/AnaSayfa.html' %}
+
+{% block title %}
+<title>{{request.user.username}}</title>
+{% endblock title %}
+
+{% block body %}
+<h4>Selam {{request.user.username}}</h4>
+<br>
+<div class="row">
+    <div class="col-lg-4 col-6">
+        <a class="btn" href="{% url 'kullaniciUpdate' %}">
+            <div class="w-100 p-4" style="background-color:#ffe6e6; border-radius:10%; min-width:210px;">
+                <i class="fas fa-user-edit" style="font-size:130px;"></i>
+                <hr>
+                <p>Profil Güncelle</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-4 col-6">
+        <a class="btn" href="{% url 'sorularUser' %}">
+            <div class="w-100 p-4" style="background-color:#e6e6ff; border-radius:10%; min-width:210px;">
+                <i class="far fa-edit" style="font-size:130px;"></i>
+                <hr>
+                <p>Sorularımı Güncelle</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-4 col-6">
+        <a class="btn" href="{% url 'yorumlarUser' %}">
+            <div class="w-100 p-4" style="background-color:#e6ffe6; border-radius:10%; min-width:210px;">
+                <i class="fas fa-comment-medical" style="font-size:130px;"></i>
+                <hr>
+                <p>Yorumlarımı Güncelle</p>
+            </div>
+        </a>
+    </div>
+     <div class="col-lg-4 col-6">
+        <a class="btn" href="{% url 'arkadasListem' %}">
+            <div class="w-100 p-4" style="background-color:rgb(220, 255, 255); border-radius:10%; min-width:210px;">
+                <i class="fas fa-users" style="font-size:130px;"></i>
+                <hr>
+                <p>Arkadaşlarım</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-4 col-6">
+        <a class="btn" href="{% url 'kullaniciBegeni' %}">
+            <div class="w-100 p-4" style="background-color:#ffbdbd; border-radius:10%; min-width:210px;">
+                <i class="fas fa-heart" style="font-size:130px;"></i>
+                <hr>
+                <p>Beğenilerim</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-4 col-6">
+        <a class="btn" href="{% url 'kullaniciDetail' request.user.id %}">
+            <div class="w-100 p-4" style="background-color:#e0ebeb; border-radius:10%; min-width:210px;">
+                <i class="far fa-id-card" style="font-size:130px;"></i>
+                <hr>
+                <p>Profilim</p>
+            </div>
+        </a>
+    </div>
+</div>
+
+{% endblock body %}

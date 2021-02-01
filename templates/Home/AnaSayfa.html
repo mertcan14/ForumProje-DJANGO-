@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js" integrity="sha256-VBLiveTKyUZMEzJd6z2mhfxIqz3ZATCuVMawPZGzIfA=" crossorigin="anonymous"></script>
+
+    <!-- Tempus Dominus Bootstrap 4 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js" integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4=" crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% block title %}
+        <title>Ana Sayfa</title>
+    {% endblock title %}
+
+    <style>
+    {% block style %}
+        .text {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; 
+            overflow:hidden;
+        }
+        .bosluk{
+            padding-top:5%;
+            padding-bottom:5%;
+            border-radius:5%
+        }
+        .anasayfa{
+            min-height:665px;
+        }
+    {% endblock style %}
+    </style>
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-light" style="background-color:#e5e969;">
+            <div class="container">
+                <a href="/" class="navbar-brand">Sözlük Forum</a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                    <form class="form-inline" style="margin-left:15%;">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="SearchString" placeholder="Ara">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-secondary"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="navbar-nav">
+                    {% if request.user.is_authenticated %}
+                        <a class="nav-item nav-link" href="{% url 'kullaniciProfil' %}">Merhaba, {{request.user.username}}</a>
+                        <a class="nav-item nav-link" href="/user/cikis/">Çıkış Yap</a>
+                    {% else %}
+                        <a class="nav-item nav-link" href="/user/giris/">Giriş Yap</a>
+                        <a class="nav-item nav-link" href="/user/kayit/">Üye Ol</a>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <nav class="navbar navbar-expand-md navbar-light" style="background-color:#e5e969; height:auto;">
+            <div class="container">
+                <a href="/arkadaslarimin" class="nav-item nav-link">Arkadaslarimin</a>
+                <a href="/kategori/1" class="nav-item nav-link">Spor</a>
+                <a href="/kategori/2" class="nav-item nav-link">Ekonomi</a>
+                <a href="/kategori/3" class="nav-item nav-link">Sağlık</a>
+                <a href="/kategori/4" class="nav-item nav-link">Eğitim</a>
+                <a href="/kategori/5" class="nav-item nav-link">Diğer</a>
+            </div>
+        </nav>
+    </header>
+    <br>
+    <div class="container anasayfa">
+        {% if messages %}
+            <ul class="messages">
+            {% for message in messages %}
+            <div style="margin-right:2%;" >
+                <div class="alert alert-{{message.tags}} alert-dismissible" >
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>{{ message }}</strong> 
+                </div>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        {% block body %}
+            {% if request.user.is_authenticated %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <a href="{% url 'kayitSoru' %}" class="btn btn-info btn-block">Soru Yaz</a>
+                    </div>
+                </div>
+                <br>
+            {% endif %}
+            <div class="row justify-content-end">
+                <div class="col-lg-4 col-3">
+                    <div class="overflow-auto container " style="max-height:640px; position:fixed; border-right-style: solid; max-width:265px;">
+                        <h4>Gundem</h4>
+                        {% include "input/gundem.html" with data=paylasimGundem %}
+                    </div>
+                </div>
+                <div class="col-lg-8 col-9">
+                    {% if paylasimlar %}
+                        {% for paylasim, paylasimKont in paylasimlar %}
+                            
+                                <div style="background-color:#faf7d3; border-radius:5%" class="container">
+                                    <div>
+                                        <a href="{% url 'detailSoru' paylasim.slug %}" style="color:black"><h2 class="text-center">{{paylasim.title}}</h2></a>
+                                        <p class="text-right"><a href="{% url 'kullaniciDetail' paylasim.reporter.id %}">{{paylasim.reporter.username}}</a></p>
+                                    </div>
+                                    <hr />
+                                    <div>
+                                        <p>{{paylasim.content|safe|truncatewords:20}}</p>
+                                        <p class="text-right"><i>{{paylasim.date}}</i></p>
+                                    </div>
+                                    {% if paylasimKont == 'False' %}
+                                        <a href="{% url 'begenSoru' paylasim.slug %}" class="btn"><i class="far fa-heart"></i></a>
+                                    {% elif paylasimKont == 'True' %}
+                                        <a href="{% url 'begensilSoru' paylasim.slug %}" class="btn"><i style="color:red;" class="fas fa-heart"></i></a>
+                                    {% endif %}
+                                </div>
+                                <hr />
+                        {% endfor %}
+                    {% elif paylasimlarNot %}
+                        {% for paylasim in paylasimlarNot %}
+                                <div style="background-color:#faf7d3; border-radius:5%" class="container">
+                                    <div>
+                                        <a href="{% url 'detailSoru' paylasim.slug %}" style="color:black"><h2 class="text-center">{{paylasim.title}}</h2></a>
+                                        <p class="text-right"><a href="{% url 'kullaniciDetail' paylasim.reporter.id %}">{{paylasim.reporter.username}}</a></p>
+                                    </div>
+                                    <hr />
+                                    <div>
+                                        <p>{{paylasim.content|safe|truncatewords:20}}</p>
+                                        <p class="text-right"><i>{{paylasim.date}}</i></p>
+                                    </div>
+                                    <a href="{% url 'begenSoru' paylasim.slug %}" class="btn"><i class="far fa-heart"></i></a>
+                                </div>
+                                <hr />
+                        {% endfor %}
+                    {% else %}
+                        <div class="container" style="background-color:#faf7d3; border-radius:6%">
+                            <h6>Üzgünüz</h6>
+                            <p style="font-size:16px;"> Aradığınız sonuç bulunamadı..</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <br>
+        {% endblock body %}
+    </div>
+    {% include 'input/footer.html' %}
+
+    {% block scripts %}
+
+    {% endblock scripts %}
+
+</body>
+</html>

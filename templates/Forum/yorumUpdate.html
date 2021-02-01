@@ -1,0 +1,26 @@
+{% extends 'Home/AnaSayfa.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+<title>{{request.user.username}} ~ Yorum Güncelle</title>
+{% endblock title %}
+
+
+{% block body %}
+    <div>
+        <h4><a style="color:black" href="{% url 'detailSoru' yorum.soru.slug %}">{{yorum.soru.title}}</a></h4>
+        <span>Yorum Güncelle</span>
+    </div>
+    <hr>
+    <form method="POST">    
+        {% csrf_token %}
+        <div class="form-group">
+            {{form.commit|as_crispy_field}}
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-8" style="margin-top:3%">
+                <button type="submit" class="btn btn-block" style="background-color:#668cff">Gönder</button>
+                <a href="{% url 'yorumlarUser'%}" class="btn btn-light btn-block">Geri Dön</a>
+            </div>
+        </div>
+    </form>
+{% endblock body %}

@@ -1,0 +1,94 @@
+{% extends 'Home/AnaSayfa.html' %}
+
+{% block title %}
+    <title>{{kullanici.username}}</title>
+{% endblock title %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-3 col-sm-10">
+            <div class="bosluk text-center" style="background-color:#faf7d3;" >
+                {% if kullaniciProfil.user_image %}
+                    <img class="img-fluid" style="padding:5%; width:100%;  border-radius: 5%;" src="{{kullaniciProfil.user_image.url}}">
+                {% else %}
+                    <i class="fas fa-user" style="font-size: 11rem"></i>
+                {% endif %}
+                <hr>
+                <p><i>{{kullanici.username}}</i></p>
+                <p><i>{{kullanici.first_name}} {{kullanici.last_name}}</i></p>
+                <p><i>{{kullaniciProfil.location}}</i></p>
+                <p><i>{{kullaniciProfil.dogum_gunu}}</i></p>
+            </div>
+            {% if arkadas == 'istek atabilir' %}
+                <div style="background-color:#ccddff; border-radius:5%; margin-top:5%; padding:1%;">
+                    <a style="color:black; font-size:1.5em; margin:2%;" href="{% url 'arkadasIstek' kullanici.id %}">Arkadaşlık İsteği <i style="font-size:1.7em;" class="fas fa-user-plus"></i></a>
+                </div>
+            {% elif arkadas == 'Arkadaslitan cikar' %}
+                <div style="background-color:#ffb3b3; border-radius:5%; margin-top:5%; padding:1%;">
+                    <a style="color:black; font-size:1.2em; margin:2%;" href="{% url 'arkadasSil' kullanici.id %}">Arkadaşlarımdan Çıkar <i style="font-size:1.6em;" class="fas fa-user-minus"></i></a>
+                </div>
+            {% elif arkadas == 'istek iptal' %}
+                <div style="background-color:#669999; border-radius:5%; margin-top:5%; padding:1%;">
+                    <a style="color:black; font-size:1.5em; margin:2%;" href="{% url 'arkadasIstekIptal' kullanici.id %}">Arkadaşlık İsteği <i style="font-size:1.7em;" class="fas fa-user-minus"></i></a>
+                </div>
+            {% elif arkadas == 'istek kabulOrRed' %}
+                <div class="row">
+                    <div class="col-xl-6 col-lg-10 text-center" style="background-color:#b3ffd9; border-radius:8%; margin-top:5%; padding:1%;">
+                        <a style="color:black; font-size:1.2em;" href="{% url 'arkadasKabul' kullanici.id %}">Kabul<i style="font-size:1.6em;" class="fas fa-user-check"></i></a>
+                    </div>
+                    <div class="col-xl-6 col-lg-10 text-center" style="background-color:#ff794d; border-radius:8%; margin-top:5%; padding:1%;">
+                        <a style="color:black; font-size:1.2em; margin:2%;" href="{% url 'arkadasIstekSil' kullanici.id %}">Red<i style="font-size:1.6em;" class="fas fa-user-slash"></i></a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-md-8 col-sm-10" style="margin-left:5%">
+            {% if kullaniciProfil.hakkimda %}
+                <h4>Hakkımda</h4>
+                <div class="bosluk container" style="background-color:#d1e0e0;" >
+                    <i>{{kullaniciProfil.hakkimda}}</i>
+                </div>
+                <br>
+            {% endif %}
+            <div>
+                <h4><a style="color:black" href="{% url 'soruyorumUser' kullanici.id 'soru' %}">Sorular ({{sorularSayi}})</a></h4>
+                {% if sorular %}
+                    {% for soru in sorular %}
+                        <div style="background-color:#cce6ff; border-radius:5%" class="container">
+                            <div>
+                                <h5 class="text-center"><a style="color:black" href="{% url 'detailSoru' soru.slug%}">{{soru.title}}</a></h5>
+                                <p style="font-size:0.9rem" class="text-right"><i>{{soru.date}}</i></p>
+                            </div>
+                        </div>
+                        <hr>
+                    {% endfor %}
+                {% else %}
+                    <div class="container" style="background-color:#faf7d3; border-radius:6%">
+                        <h6>Üzgünüz..</h6>
+                        <p style="font-size:16px;"> Kullanıcı soru sormamış..</p>
+                    </div>
+                {% endif %}
+            </div>
+            <div style="margin-top:5%">
+                <h4><a style="color:black" href="{% url 'soruyorumUser' kullanici.id 'yorum' %}">Yorumlar ({{yorumlarSayi}})</a></h4>
+                {% if yorumlar %}
+                    {% for yorum in yorumlar %}
+                        <div style="background-color:#cce6ff; border-radius:5%" class="container">
+                            <div>
+                                <p><a style="color:black" href="{% url 'detailSoru' yorum.soru.slug%}"><strong>{{yorum.soru.title}}</strong></a> ~ {{yorum.commit}}</p>
+                                <p style="font-size:0.9rem" class="text-right"><i>{{yorum.date}}</i></p>
+                            </div>
+                        </div>
+                        <hr>
+                    {% endfor %}
+                {% else %}
+                    <div class="container" style="background-color:#faf7d3; border-radius:6%">
+                        <h6>Üzgünüz..</h6>
+                        <p style="font-size:16px;"> Kullanıcı yorum yapmamış..</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+        </div>
+    </div>
+{% endblock body %}

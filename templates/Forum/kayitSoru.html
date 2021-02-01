@@ -1,0 +1,16 @@
+{% extends 'Home/AnaSayfa.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+<title>Soru Oluştur</title>
+{% endblock title %}
+
+{% block body %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.media }}
+    {{ form|crispy}}
+    <div class="row justify-content-center">
+        <button type="submit" class="btn-lg" style="background-color:#668cff">Kaydet</button>
+    </div>
+</form>
+{% endblock body %}

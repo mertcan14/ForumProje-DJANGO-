@@ -1,0 +1,53 @@
+{% extends 'Home/AnaSayfa.html' %}
+
+{% block title %}
+    <title>{{kullanici.username}} Soruları</title>
+{% endblock title %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-3 col-sm-10 text-center">
+            <div style="background-color:#faf7d3; padding-top:5%; padding-bottom:5%; border-radius:5%" >
+                {% if kullaniciProfil.user_image %}
+                    <img class="img-fluid" style="padding:5%; width:100%;  border-radius: 5%;" src="{{kullaniciProfil.user_image.url}}">
+                {% else %}
+                    <i class="fas fa-user" style="font-size: 11rem"></i>
+                {% endif %}
+                <hr>
+                <p><i>{{kullanici.username}}</i></p>
+                <p><i>{{kullanici.first_name}} {{kullanici.last_name}}</i></p>
+                <p><i>{{kullaniciProfil.location}}</i></p>
+                <p><i>{{kullaniciProfil.dogum_gunu}}</i></p>
+            </div>
+        </div>
+        <div class="col-md-8 col-sm-10" style="margin-left:5%">
+            <div>
+                {% if sorular %}
+                    <h4>Sorular ({{sorularSayi}})</h4>
+                    {% for soru in sorular %}
+                        <div style="background-color:#cce6ff; border-radius:5%" class="container">
+                            <div>
+                                <h5 class="text-center"><a style="color:black" href="{% url 'detailSoru' soru.slug%}">{{soru.title}}</a></h5>
+                                <p style="font-size:0.9rem" class="text-right"><i>{{soru.date}}</i></p>
+                            </div>
+                        </div>
+                        <hr>
+                    {% endfor %}
+                {% else %}
+                    <h4>Yorumlar ({{yorumlarSayi}})</h4>
+                    {% for yorum in yorumlar %}
+                        <div style="background-color:#cce6ff; border-radius:5%" class="container">
+                            <div>
+                                <p><a style="color:black" href="{% url 'detailSoru' yorum.soru.slug%}"><strong>{{yorum.soru.title}}</strong></a> ~ {{yorum.commit}}</p>
+                                <p style="font-size:0.9rem" class="text-right"><i>{{yorum.date}}</i></p>
+                            </div>
+                        </div>
+                        <hr>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+
+                

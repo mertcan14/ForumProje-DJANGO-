@@ -1,0 +1,132 @@
+{% extends 'Home/AnaSayfa.html' %}
+
+{% block title %}
+<title>Arkadaşlarım</title>
+{% endblock title %}
+
+{% block body %}
+<h4>Arkadaşlarım</h4>
+<br>
+<div class ="row">
+    <div class="col-lg-8 col-12">
+        {% if arkadaslarim is None %}
+            <div class="container" style="background-color:#faf7d3; border-radius:6%">
+                <h6>Üzgünüz</h6>
+                <p style="font-size:16px;"> İstek henüz yok..</p>
+            </div>
+        {% else %}
+            <div>
+                {% for arkadas in arkadaslarim %}
+                    <div class="row" style="background-color:#d6f5f5; border-radius:5px;">
+                        {% if arkadas.arkadas1.username == request.user.username %}
+                            <div class="col-4" style="margin:auto">
+                                {% if arkadas.arkadas2.profil.user_image %}
+                                    <a href="{% url 'kullaniciDetail' arkadas.arkadas2.id %}"><img class="img-fluid" style="width:auto; min-width:38px; border-radius:50%" src="{{arkadas.arkadas2.profil.user_image.url}}"></a>
+                                {% else %}
+                                    <a href="{% url 'kullaniciDetail' arkadas.arkadas2.id %}"><i class="fas fa-user" style="font-size: 4rem; border-radius:50%; color:black"></i></a>
+                                {% endif %}
+                            </div>
+                            <div class="col-7" style="margin:auto;">
+                                <h4><a href="{% url 'kullaniciDetail' arkadas.arkadas2.id %}" style="color:black">{{arkadas.arkadas2.username}}</a></h4>
+                            </div>
+                            <div class="col-1" style="margin:auto;">
+                                <a type="button" data-toggle="modal" data-target="#arkadasSil{{arkadas.id}}" ><i style="color:red; font-size:1.7em" class="fas fa-trash-alt"></i></a>
+                            </div>
+                        {% else %}
+                            <div class="col-4" style="margin:auto">
+                                {% if arkadas.arkadas1.profil.user_image %}
+                                    <a href="{% url 'kullaniciDetail' arkadas.arkadas1.id %}"><img class="img-fluid" style="width:auto; min-width:38px; border-radius:50%" src="{{arkadas.arkadas1.profil.user_image.url}}"></a>
+                                {% else %}
+                                    <a href="{% url 'kullaniciDetail' arkadas.arkadas1.id %}"><i class="fas fa-user" style="font-size: 4rem; border-radius:50%; color:black"></i></a>
+                                {% endif %}
+                            </div>
+                            <div class="col-7" style="margin:auto;">
+                                <h4><a href="{% url 'kullaniciDetail' arkadas.arkadas1.id %}" style="color:black">{{arkadas.arkadas1.username}}</a></h4>
+                            </div>
+                            <div class="col-1" style="margin:auto;">
+                                <a type="button" data-toggle="modal" data-target="#arkadasSil{{arkadas.id}}" ><i style="color:red; font-size:1.7em" class="fas fa-trash-alt"></i></a>
+                            </div>
+                        {% endif %}    
+                        <div class="modal" id="arkadasSil{{arkadas.id}}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                    <h4 class="modal-title">İstek Silmek</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                    Silmek İstediğinize Emin Misiniz?
+                                    </div>
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        {% if arkadas.arkadas1.username == request.user.username %}
+                                            <a href="{% url 'arkadasSil' arkadas.arkadas2.id %}"  class="btn btn-danger">Evet</a>
+                                        {% else %}
+                                            <a href="{% url 'arkadasSil' arkadas.arkadas1.id %}"  class="btn btn-danger">Evet</a>
+                                        {% endif %}
+                                        <button type="button" class="btn btn-light" data-dismiss="modal">Hayır</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-lg-4 col-12">
+        <h5>İstekler</h5>
+        {% if istekler is None %}
+            <div class="container" style="background-color:#faf7d3; border-radius:6%">
+                <h6>Üzgünüz</h6>
+                <p style="font-size:16px;"> İstek henüz yok..</p>
+            </div>
+        {% else %}
+            <table class="table" >
+                <tr>
+                    <th class="text-center">Username</th>
+                    <th class="text-center">Kabul Et</th>
+                    <th class="text-center">Sil</th>
+                </tr>
+                {% for istek in istekler %}
+                    <tr style="{% cycle 'background-color:#fff2e6' 'background-color:white' %}" >
+                        <td><a style="color:black" href="{% url 'kullaniciDetail' istek.atanKullanici.id %}">{{istek.atanKullanici.username}}</a></td>
+                        <td class="text-center"><a href="{% url 'arkadasKabul' istek.atanKullanici.id %}" ><i style="color:blue; font-size:2em" class="fas fa-check-circle"></i></a></td>
+                        <td class="text-center"><a type="button" data-toggle="modal" data-target="#myModal" ><i style="color:red; font-size:1.7em" class="fas fa-trash-alt"></i></a></td>
+                    </tr>
+                    <div class="modal" id="myModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                <h4 class="modal-title">İstek Silmek</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                Silmek İstediğinize Emin Misiniz?
+                                </div>
+                                
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                <a href="{% url 'arkadasIstekSil' istek.atanKullanici.id %}"  class="btn btn-danger">Evet</a>
+                                <button type="button" class="btn btn-light" data-dismiss="modal">Hayır</button>
+                                </div>
+
+                                
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </table>
+            <br>
+        {% endif %}
+    </div>
+</div>
+{% endblock body %}
+
